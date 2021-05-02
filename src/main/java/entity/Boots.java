@@ -18,4 +18,9 @@ public class Boots extends Product {
     boolean madeOfSkin () {
         return isNaturalSkin;
     }
+
+    @Override
+    public String toString() {
+        return productType + productSeparator + getBasicProductString() + productSeparator + size + productSeparator + isNaturalSkin + endProductSign();
+    }
 }

@@ -5,14 +5,15 @@ import api.ProductDao;
 import api.ProductService;
 import dao.ProductDaoImpl;
 import entity.Product;
-import entity.User;
+
+import validator.ProductValidator;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductServiceImpl implements ProductService {
     private ProductDaoImpl productDao = ProductDaoImpl.getInstance();
+    private ProductValidator productValidator = ProductValidator.getInstance();
 
     //Singleton
     private static ProductServiceImpl instanceProductService = null;
@@ -42,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProductByName(String name) throws IOException {
         return instanceProductService.getProductByName(name);
-            }
+    }
 
     public Product getProductById(Long productId) throws IOException {
         List<Product> products = getAllProducts();
@@ -62,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean isProductOnWarehouse(String name) {
         try {
-            for(Product product : getAllProducts()) {
+            for (Product product : getAllProducts()) {
                 if (isProductByNameAvailable(name) && product.getProductCount() > 0) {
                     return true;
                 }
@@ -107,6 +108,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean saveProduct(Product product) {
+        try {
+            if (productValidator.isValidate(product)) {
+                productDao.saveProduct(product);
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         return false;
     }
 }

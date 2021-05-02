@@ -56,8 +56,8 @@ public class ProductParser {
 
         String[] splittedProductString = productString.split(Product.productSeparator);
 
-        Long id = Long.parseLong(splittedProductString[2]);
-        String productName = splittedProductString[3];
+        Long id = Long.parseLong(splittedProductString[1]);
+        String productName = splittedProductString[2];
         float price = Float.parseFloat(splittedProductString[3]);
         float weight = Float.parseFloat(splittedProductString[4]);
         String color = splittedProductString[5];

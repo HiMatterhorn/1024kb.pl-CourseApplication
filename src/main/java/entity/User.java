@@ -5,7 +5,7 @@ public class User {
     private Long id;
     private String login;
     private String password;
-    public static final String userSeparator = " #";
+    public static final String userSeparator = "#";
 
     public User(Long id, String login, String password) {
         this.id = id;
@@ -27,6 +27,6 @@ public class User {
 
     @Override
     public String toString() {
-        return id + "." + userSeparator + login + userSeparator + password +" \n";
+        return id + userSeparator + login + userSeparator + password +"\n";
     }
 }

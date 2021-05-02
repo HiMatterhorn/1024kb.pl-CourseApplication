@@ -48,30 +48,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByLogin(String login) throws IOException {
-        List<User> listOfAllUser = getAllUsers();
+    public User getUserByLogin(String login) {
+        List<User> listOfAllUser = null;
 
-        for (User user : listOfAllUser) {
-            if (user.getUserLogin().equals(login)) {
-                return user;
+        try {
+            listOfAllUser = getAllUsers();
+            for (User user : listOfAllUser) {
+                if (user.getUserLogin().equals(login)) {
+                    return user;
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
         return null;
     }
 
     @Override
     public boolean isCorrectLoginAndPassword(String login, String password) {
-        return false;
+
+        User foundUser = getUserByLogin(login);
+
+        if (foundUser == null) {
+            return false;
+        }
+
+        boolean isCorrectLogin = foundUser.getUserLogin().equals(login);
+        boolean isCorrectPass = foundUser.getUserPassword().equals(password);
+
+        return isCorrectLogin && isCorrectPass;
     }
 
     @Override
     public boolean addUser(User user) {
-        System.out.println("Przekazany user");
-        System.out.println(user.getUserId());
-        System.out.println(user.getUserLogin());
-        System.out.println(user.getUserPassword());
-
-
         try {
             if (isLoginExist(user.getUserLogin())) {
                 throw new UserLoginAlreadyExistException();
@@ -83,7 +93,6 @@ public class UserServiceImpl implements UserService {
 
         try {
             if (userValidator.isValidate(user)) {
-                System.out.println("User valid");
                 userDao.saveUser(user);
                 return true;
             }
@@ -103,19 +112,11 @@ public class UserServiceImpl implements UserService {
         userDao.removeUserById(userId);
     }
 
-    private boolean isLoginExist(String login) throws UserLoginAlreadyExistException {
+    private boolean isLoginExist(String login) {
         User user = null;
-       try {
-            user = userServiceInstance.getUserByLogin(login);
+        user = userServiceInstance.getUserByLogin(login);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        if (user == null) {
-            return false;
-        }
-
-        return true;
+            return (user != null);
     }
 }

@@ -7,7 +7,7 @@ public class Product {
     private float weight;
     private String color;
     private int productCount;
-    public static final String productSeparator = " #";
+    public static final String productSeparator = "#";
     public final static char productType = 'P';
 
     public Product (Long id, String productName, float price, float weight, String color, int productCount){
@@ -52,9 +52,17 @@ public class Product {
         this.productCount = productCount;
     }
 
+    protected String getBasicProductString() {
+        return id + productSeparator + productName + productSeparator + price + productSeparator + weight + productSeparator + color + productSeparator + productCount;
+    }
+
+    protected String endProductSign(){
+        return "\n";
+    }
+
     @Override
     public String toString() {
-        return productType + productSeparator + " " + id + "." + productSeparator + productName + productSeparator + price + productSeparator + weight + productSeparator + color + productSeparator + productCount + productSeparator + "\n";
+        return productType + productSeparator + getBasicProductString() + endProductSign();
     }
 
 }

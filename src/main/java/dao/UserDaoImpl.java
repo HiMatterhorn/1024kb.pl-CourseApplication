@@ -15,8 +15,8 @@ public class UserDaoImpl implements UserDao {
     private static UserDaoImpl instance = null;
     private static String fileName = "users.data";
 
-    public static UserDaoImpl getInstance(){
-        if (instance == null){
+    public static UserDaoImpl getInstance() {
+        if (instance == null) {
             instance = new UserDaoImpl();
         }
         return instance;
@@ -55,10 +55,9 @@ public class UserDaoImpl implements UserDao {
         List<User> allUsers = new ArrayList<User>();
         BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
-        String readLine = reader.readLine();
-        while (readLine != null) {
-            System.out.println("Nowa linia : " + reader.readLine());
-            User readUser = UserParser.stringToUser(reader.readLine());
+        String readUserLine = null;
+        while ((readUserLine = reader.readLine()) != null) {
+            User readUser = UserParser.stringToUser(readUserLine);
             if (readUser != null) {
                 allUsers.add(readUser);
             }

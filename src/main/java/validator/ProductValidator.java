@@ -10,7 +10,7 @@ public class ProductValidator {
     //Singleton
     private static ProductValidator instanceProductValidator = null;
 
-    public static ProductValidator getInstanceProductValidator() {
+    public static ProductValidator getInstance() {
         if (instanceProductValidator == null) {
             instanceProductValidator = new ProductValidator();
         }
