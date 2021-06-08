@@ -19,19 +19,19 @@ public class ProductValidator {
 
     public boolean isValidate(Product product) throws ProductPriceNoPositiveException, ProductCountNegativeException, ProductWeightNoPositiveException, ProductNameEmptyException {
         if (!isProductPricePositive(product.getPrice())) {
-            throw new ProductPriceNoPositiveException();
+            throw new ProductPriceNoPositiveException("Price parameter is not positive");
         }
 
         if (!isProductCountPositive(product.getProductCount())) {
-            throw new ProductCountNegativeException();
+            throw new ProductCountNegativeException("Count parameter is not positive");
         }
 
         if (!isProductWeightPositive(product.getWeight())) {
-            throw new ProductWeightNoPositiveException();
+            throw new ProductWeightNoPositiveException("Weight parameter is not positive");
         }
 
         if (!isProductNameNotNull(product.getProductName())) {
-            throw new ProductNameEmptyException();
+            throw new ProductNameEmptyException("Product name is empty");
         }
 
         return true;
@@ -39,7 +39,7 @@ public class ProductValidator {
 
 
     private boolean isProductPricePositive(Float price) {
-        return price > 0;
+        return price > 0f;
     }
 
     private boolean isProductCountPositive(Integer count) {
@@ -47,13 +47,10 @@ public class ProductValidator {
     }
 
     private boolean isProductWeightPositive(Float weight) {
-        return weight > 0;
+        return weight > 0f;
     }
 
     private boolean isProductNameNotNull(String name) {
-        if (name != null && name != "") {
-            return true;
-        }
-        return false;
+        return name.length() != 0;
     }
 }

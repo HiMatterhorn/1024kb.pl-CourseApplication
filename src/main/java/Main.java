@@ -4,6 +4,12 @@ import entity.Boots;
 import entity.Cloth;
 import entity.Product;
 import entity.User;
+import entity.enums.Colors;
+import entity.enums.Material;
+import entity.enums.SkinType;
+import entity.parse.ColorParser;
+import entity.parse.MaterialParser;
+import entity.parse.SkinParser;
 import facade.UserRegisterLoginImpl;
 import service.ProductServiceImpl;
 import service.UserServiceImpl;
@@ -35,7 +41,8 @@ public class Main {
     }
 
     public static Product createOtherProduct() {
-        String productName, color;
+        String productName;
+        Colors color;
         Float price, weight;
         Integer count;
         System.out.println("ProductName: ");
@@ -48,7 +55,7 @@ public class Main {
         weight = scanner.nextFloat();
 
         System.out.println("Color: ");
-        color = scanner.next();
+        color = ColorParser.parseStringToColor(scanner.next());
 
         System.out.println("Count: ");
         count = scanner.nextInt();
@@ -57,10 +64,11 @@ public class Main {
     }
 
     public static Product createBootsProduct() {
-        String productName, color;
+        String productName;
+        Colors color;
         Float price, weight;
         Integer count, size;
-        Boolean isNaturalSkin;
+        SkinType skinType;
 
         System.out.println("ProductName: ");
         productName = scanner.next();
@@ -72,7 +80,7 @@ public class Main {
         weight = scanner.nextFloat();
 
         System.out.println("Color: ");
-        color = scanner.next();
+        color = ColorParser.parseStringToColor(scanner.next());
 
         System.out.println("Count: ");
         count = scanner.nextInt();
@@ -80,15 +88,17 @@ public class Main {
         System.out.println("Size: ");
         size = scanner.nextInt();
 
-        System.out.println("Is natural skin: ");
-        isNaturalSkin = scanner.nextBoolean();
+        System.out.println("Skin type ");
+        skinType = SkinParser.parseStringToSkinType(scanner.next());
 
 
-        return new Boots(1L, productName, price, weight, color, count, size, isNaturalSkin);
+        return new Boots(1L, productName, price, weight, color, count, size, skinType);
     }
 
     public static Product createClothProduct() {
-        String productName, color, size, material;
+        String productName, size;
+        Material material;
+        Colors color;
         Float price, weight;
         Integer count;
 
@@ -102,7 +112,7 @@ public class Main {
         weight = scanner.nextFloat();
 
         System.out.println("Color: ");
-        color = scanner.next();
+        color = ColorParser.parseStringToColor(scanner.next());
 
         System.out.println("Count: ");
         count = scanner.nextInt();
@@ -110,8 +120,8 @@ public class Main {
         System.out.println("Size: ");
         size = scanner.next();
 
-        System.out.println("Material: ");
-        material = scanner.next();
+        System.out.println("Material: LEATHER, FUR, COTTON, WOOL, POLYESTERS");
+        material = MaterialParser.parseStringToMaterial(scanner.next());
 
 
         return new Cloth(1L, productName, price, weight, color, count, size, material);

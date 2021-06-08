@@ -11,22 +11,26 @@ public class UserRegisterLoginImpl implements UserRegisterLoginFacade {
 
     private static UserRegisterLoginImpl instanceUserRegisterLoginImpl = null;
 
-    public static UserRegisterLoginImpl getInstance(){
-        if(instanceUserRegisterLoginImpl == null){
+    public static UserRegisterLoginImpl getInstance() {
+        if (instanceUserRegisterLoginImpl == null) {
             instanceUserRegisterLoginImpl = new UserRegisterLoginImpl();
         }
         return instanceUserRegisterLoginImpl;
     }
 
+    private UserRegisterLoginImpl () {
+
+    }
+
 
     @Override
     public boolean registerUser(User user) {
-return  userService.addUser(user);
+        return userService.addUser(user);
     }
 
     @Override
     public boolean loginUser(String login, String password) {
-        if(userService.isCorrectLoginAndPassword(login, password)){
+        if (userService.isCorrectLoginAndPassword(login, password)) {
             return true;
         }
         return false;
