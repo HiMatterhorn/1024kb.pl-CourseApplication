@@ -30,7 +30,7 @@ public class UserDaoImpl implements UserDao {
     private static void initCommunication() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost/" + databaseName + "?useSSL=false", user, password)
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/" + databaseName + "?useSSL=false", user, password);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,7 +76,19 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void removeUserByLogin(String login) {
+        PreparedStatement statement = null;
 
+        try {
+            String query = "delete from " + tableName + " where ID = ?";
+            statement = connection.prepareStatement(query);
+
+            statement.setString(1, login);
+
+            statement.execute();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -107,7 +119,19 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void updateUser(User user) {
+        PreparedStatement statement = null;
 
+
+        try {
+            String query = "update " + tableName + " set login = ?, password = ?;";
+            statement = connection.prepareStatement(query);
+
+            statement.setString(1, user.getUserLogin());
+            statement.setString(2, user.getUserPassword());
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }
 
