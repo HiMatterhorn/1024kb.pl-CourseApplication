@@ -15,6 +15,12 @@ public class Boots extends Product {
         this.skinType = isNaturalSkin;
     }
 
+    public Boots (String productName, float price, float weight, Colors color, int productCount, int size, SkinType isNaturalSkin){
+        super(productName, price, weight, color, productCount);
+        this.size = size;
+        this.skinType = isNaturalSkin;
+    }
+
     int getSize () {
         return this.size;
     }

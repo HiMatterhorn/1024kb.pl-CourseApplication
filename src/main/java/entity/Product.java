@@ -21,6 +21,14 @@ public class Product {
         this.productCount = productCount;
     }
 
+    public Product (String productName, float price, float weight, Colors color, int productCount){
+        this.productName =productName;
+        this.price = price;
+        this.weight = weight;
+        this.color = color;
+        this.productCount = productCount;
+    }
+
 
     public Long getProductID (){
         return this.id;

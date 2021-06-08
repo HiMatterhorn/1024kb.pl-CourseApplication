@@ -14,6 +14,12 @@ public class Cloth extends Product {
         this.material = material;
     }
 
+    public Cloth (String productName, float price, float weight, Colors color, int productCount, String size, Material material){
+        super (productName, price, weight, color, productCount);
+        this.size = size;
+        this.material = material;
+    }
+
     String getSize () {
         return this.size;
     }

@@ -3,7 +3,7 @@ package dao;
 import api.ProductDao;
 import entity.Product;
 import entity.parse.ProductParser;
-import utils.FileUtils;
+/*import utils.FileUtils;*/
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,14 +14,14 @@ public class ProductDaoImpl implements ProductDao {
     private final String fileName = "products.data";
 
 
-    private ProductDaoImpl(){
+/*    private ProductDaoImpl(){
 
         try {
             FileUtils.createNewFile(fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     static ProductDaoImpl instanceProductDaoImpl;
 

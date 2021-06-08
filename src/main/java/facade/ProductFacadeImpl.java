@@ -1,9 +1,7 @@
 package facade;
 
-import api.ProductDao;
 import api.ProductFacade;
 import api.ProductService;
-import dao.ProductDaoImpl;
 import entity.Product;
 import exception.ProductCountNegativeException;
 import exception.ProductNameEmptyException;
@@ -12,18 +10,20 @@ import exception.ProductWeightNoPositiveException;
 import service.ProductServiceImpl;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 public class ProductFacadeImpl implements ProductFacade {
     private ProductService productService = ProductServiceImpl.getInstance();
 
     //Singleton
-    private ProductFacadeImpl instanceProductFacadeImpl = null;
+    private static ProductFacadeImpl instanceProductFacadeImpl = null;
 
-    public void getInstance() {
+    public static ProductFacadeImpl getInstance() {
         if (instanceProductFacadeImpl == null) {
             instanceProductFacadeImpl = new ProductFacadeImpl();
         }
+        return instanceProductFacadeImpl;
     }
 
     @Override
@@ -62,6 +62,11 @@ public class ProductFacadeImpl implements ProductFacade {
 
     @Override
     public List<Product> getAllProducts() {
-        return null;
+        try {
+            return productService.getAllProducts();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+         return Collections.emptyList();
     }
 }
