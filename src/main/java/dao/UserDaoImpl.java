@@ -27,7 +27,7 @@ public class UserDaoImpl implements UserDao {
         return instance;
     }
 
-    private static void initCommunication (){
+    private static void initCommunication() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost/" + databaseName + "?useSSL=false", user, password)
@@ -38,6 +38,21 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void saveUser(User user) {
+        PreparedStatement statement = null;
+
+        try {
+            String query = "insert into " + tableName + "(ID = ?, user = ?, login = ?);";
+            statement = connection.prepareStatement(query);
+
+            statement.setLong(1,user.getUserId());
+            statement.setString(2, user.getUserLogin());
+            statement.setString(3, user.getUserPassword());
+
+            statement.execute();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -60,12 +75,12 @@ public class UserDaoImpl implements UserDao {
             String query = "select * from " + tableName + ";";
             ResultSet resultSet = connection.createStatement().executeQuery(query);
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 Long ID = resultSet.getLong("ID");
                 String login = resultSet.getString("login");
                 String password = resultSet.getString("password");
 
-                users.add(new User(ID,login,password));
+                users.add(new User(ID, login, password));
             }
 
             statement.close();
