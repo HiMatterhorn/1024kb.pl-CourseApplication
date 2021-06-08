@@ -1,93 +1,138 @@
 package dao;
 
 import api.UserDao;
-import dao.UserDaoImpl;
 import entity.User;
-import entity.parse.UserParser;
-import utils.FileUtils;
 
-import java.io.*;
-
-import java.util.ArrayList;
+import java.sql.*;
+import java.util.LinkedList;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao {
     private static UserDaoImpl instance = null;
-    private static String fileName = "users.data";
+
+    private static Connection connection;
+    private static final String databaseName = "management";
+    private static final String user = "root";
+    private static final String password = "admin";
+
+    private static String tableName = "users";
+
 
     public static UserDaoImpl getInstance() {
         if (instance == null) {
             instance = new UserDaoImpl();
+            initCommunication();
+
         }
         return instance;
     }
 
-    private UserDaoImpl() {
+    private static void initCommunication() {
         try {
-            FileUtils.createNewFile(fileName);
-        } catch (IOException e) {
-            System.out.println("Error with file path");
-            System.exit(-1);
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/" + databaseName + "?useSSL=false", user, password);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void saveUser(User user) throws IOException {
-        List<User> allUsers = getAllUsers();
-        allUsers.add(user);
-        saveUsersList(allUsers);
-    }
+    public void saveUser(User user) {
+        PreparedStatement statement = null;
 
-    @Override
-    public void saveUsersList(List<User> users) throws IOException {
-        new FileWriter(fileName, false).close();
-        FileWriter fileWriter = new FileWriter(fileName, true);
+        try {
+            String query = "insert into " + tableName + "(ID = ?, user = ?, login = ?);";
+            statement = connection.prepareStatement(query);
 
-        for (User user : users) {
-            fileWriter.write(user.toString());
+            statement.setLong(1, user.getUserId());
+            statement.setString(2, user.getUserLogin());
+            statement.setString(3, user.getUserPassword());
+
+            statement.execute();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        fileWriter.close();
     }
 
     @Override
-    public List<User> getAllUsers() throws IOException {
-        List<User> allUsers = new ArrayList<User>();
-        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+    public void removeUserById(Long userId) {
+        PreparedStatement statement = null;
 
-        String readUserLine = null;
-        while ((readUserLine = reader.readLine()) != null) {
-            User readUser = UserParser.stringToUser(readUserLine);
-            if (readUser != null) {
-                allUsers.add(readUser);
+        try {
+            String query = "delete from " + tableName + " where ID = ?";
+            statement = connection.prepareStatement(query);
+
+            statement.setLong(1, userId);
+
+            statement.execute();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void removeUserByLogin(String login) {
+        PreparedStatement statement = null;
+
+        try {
+            String query = "delete from " + tableName + " where ID = ?";
+            statement = connection.prepareStatement(query);
+
+            statement.setString(1, login);
+
+            statement.execute();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        List<User> users = new LinkedList<User>();
+        Statement statement = null;
+
+        try {
+            String query = "select * from " + tableName + ";";
+            ResultSet resultSet = connection.createStatement().executeQuery(query);
+
+            while (resultSet.next()) {
+                Long ID = resultSet.getLong("ID");
+                String login = resultSet.getString("login");
+                String password = resultSet.getString("password");
+
+                users.add(new User(ID, login, password));
             }
+
+            statement.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        reader.close();
 
-        return allUsers;
-    }
-
-
-    @Override
-    public void removeUserByLogin(String login) throws IOException {
-        List<User> listOfAllUsers = getAllUsers();
-
-        for (User user : listOfAllUsers) {
-            if (user.getUserLogin().equals(login)) {
-                listOfAllUsers.remove(user);
-            }
-        }
+        return users;
     }
 
     @Override
-    public void removeUserById(Long Id) throws IOException {
-        List<User> listOfAllUsers = getAllUsers();
+    public void updateUser(User user) {
+        PreparedStatement statement = null;
 
-        for (User user : listOfAllUsers) {
-            if (user.getUserId().equals(Id)) {
-                listOfAllUsers.remove(user);
-            }
+
+        try {
+            String query = "update " + tableName + " set login = ?, password = ?;";
+            statement = connection.prepareStatement(query);
+
+            statement.setString(1, user.getUserLogin());
+            statement.setString(2, user.getUserPassword());
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
-
 }
+
+
