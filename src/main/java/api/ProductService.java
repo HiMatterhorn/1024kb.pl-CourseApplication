@@ -1,6 +1,10 @@
 package api;
 
 import entity.Product;
+import exception.ProductCountNegativeException;
+import exception.ProductNameEmptyException;
+import exception.ProductPriceNoPositiveException;
+import exception.ProductWeightNoPositiveException;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,10 +15,10 @@ public interface ProductService {
     Integer getProductsCount() throws IOException;
     Product getProductByName(String name) throws IOException;
 
-    boolean isProductOnWarehouse (String name);
-    boolean isProductByNameAvailable (String name);
-    boolean isProductByIdAvailable (Long id);
+    boolean isProductOnWarehouse (String name) throws IOException;
+    boolean isProductByNameAvailable (String name) throws IOException;
+    boolean isProductByIdAvailable (Long id) throws IOException;
 
-    boolean saveProduct (Product product);
+    boolean saveProduct (Product product) throws ProductPriceNoPositiveException, ProductNameEmptyException, ProductCountNegativeException, ProductWeightNoPositiveException, IOException;
 
 }
