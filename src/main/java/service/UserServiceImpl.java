@@ -31,12 +31,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() throws IOException {
+    public List<User> getAllUsers() {
         return userDao.getAllUsers();
     }
 
     @Override
-    public User getUserById(Long userId) throws IOException {
+    public User getUserById(Long userId) {
         List<User> listOfAllUsers = getAllUsers();
 
         for (User user : listOfAllUsers) {
@@ -49,17 +49,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByLogin(String login) {
-        List<User> listOfAllUser = null;
+        List<User> listOfAllUser = getAllUsers();
 
-        try {
-            listOfAllUser = getAllUsers();
             for (User user : listOfAllUser) {
                 if (user.getUserLogin().equals(login)) {
                     return user;
                 }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -81,28 +76,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addUser(User user) {
-        try {
+    public boolean addUser(User user) throws UserShortLengthPasswordException, UserShortLengthLoginException, UserLoginAlreadyExistException {
+
             if (isLoginExist(user.getUserLogin())) {
                 throw new UserLoginAlreadyExistException();
-            }
-        } catch (UserLoginAlreadyExistException e) {
-            System.out.println(e);
         }
 
-
-        try {
             if (userValidator.isValidate(user)) {
                 userDao.saveUser(user);
                 return true;
             }
-        } catch (UserShortLengthPasswordException e) {
-            System.out.println(e);
-        } catch (UserShortLengthLoginException e) {
-            System.out.println(e);
-        } catch (IOException e) {
-            System.out.println(e);
-        }
 
         return false;
     }
@@ -113,8 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isLoginExist(String login) {
-        User user = null;
-        user = userServiceInstance.getUserByLogin(login);
+        User user = userServiceInstance.getUserByLogin(login);
 
 
             return (user != null);

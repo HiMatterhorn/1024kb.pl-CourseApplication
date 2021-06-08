@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
-    boolean addUser(User user);
+    boolean addUser(User user) throws UserShortLengthPasswordException, UserShortLengthLoginException, UserLoginAlreadyExistException;
 
     void removeUserById(Long userId) throws IOException;
 
@@ -18,7 +18,7 @@ public interface UserService {
     User getUserById(Long userId) throws IOException;
     User getUserByLogin(String login) throws IOException;
 
-    boolean isCorrectLoginAndPassword (String login, String password);
+    boolean isCorrectLoginAndPassword (String login, String password) throws IOException;
 
 }
 

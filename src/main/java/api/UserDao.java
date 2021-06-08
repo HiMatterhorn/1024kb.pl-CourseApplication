@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface UserDao {
     void saveUser (User user);
-//    void saveUsersList (List<User> users) throws IOException;
 
     void removeUserById (Long userId);
     void removeUserByLogin (String login);
