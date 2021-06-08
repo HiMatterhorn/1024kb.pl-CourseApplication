@@ -44,7 +44,7 @@ public class UserDaoImpl implements UserDao {
             String query = "insert into " + tableName + "(ID = ?, user = ?, login = ?);";
             statement = connection.prepareStatement(query);
 
-            statement.setLong(1,user.getUserId());
+            statement.setLong(1, user.getUserId());
             statement.setString(2, user.getUserLogin());
             statement.setString(3, user.getUserPassword());
 
@@ -58,6 +58,19 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void removeUserById(Long userId) {
+        PreparedStatement statement = null;
+
+        try {
+            String query = "delete from " + tableName + " where ID = ?";
+            statement = connection.prepareStatement(query);
+
+            statement.setLong(1, userId);
+
+            statement.execute();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
