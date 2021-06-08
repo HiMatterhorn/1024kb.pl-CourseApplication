@@ -100,4 +100,10 @@ public class ProductServiceImpl implements ProductService {
 
         return false;
     }
+
+    @Override
+    public void removeProduct(String productName) throws Exception {
+        productDao.removeProductByName(productName);
+    }
+
 }
