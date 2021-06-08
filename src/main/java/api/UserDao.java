@@ -13,7 +13,7 @@ public interface UserDao {
     void removeUserById (Long userId);
     void removeUserByLogin (String login);
 
-    List<User> getAllUsers () throws IOException;
+    List<User> getAllUsers ();
 
     void updateUser(User user);
 }
