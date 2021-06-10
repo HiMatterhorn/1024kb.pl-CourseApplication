@@ -13,6 +13,7 @@ import entity.parse.SkinParser;
 import facade.ProductFacadeImpl;
 import facade.UserRegisterLoginImpl;
 
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -20,14 +21,14 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
 
     public static void startMenu() {
-        System.out.println("MANAGEMENT MENU");
+        System.out.println("START MENU");
         System.out.println("1 - Zaloguj się");
         System.out.println("2 - Zarejestruj się");
         System.out.println("0 - Wyjdź");
     }
 
     public static void loggedMenu() {
-        System.out.println("MANAGEMENT MENU");
+        System.out.println("PRODUCT MENU");
         System.out.println("1 - Dodaj nowy product");
         System.out.println("2 - Usuń produkt");
         System.out.println("3 - Wyświetl dostępne produkty");
@@ -127,12 +128,15 @@ public class Main {
         return new Cloth(productName, price, weight, color, count, size, material);
     }
 
+    public static void showProduct(Product product){
+        System.out.println("ProductName: " + product.getProductName() + "\t" + "Price: " + product.getPrice() + "\t" + "Weight: " + product.getWeight() + "\t" + "Color: " + product.getColor() + "\t" + "Count: " + product.getProductCount());
+    }
+
 
     public static void main(String[] args) {
 
         UserRegisterLoginFacade userFacade = UserRegisterLoginImpl.getInstance();
         ProductFacadeImpl productFacade = ProductFacadeImpl.getInstance();
-//        ProductService productService = ProductServiceImpl.getInstance();
 
         boolean appOn = true;
         boolean loggedOn = false;
@@ -166,7 +170,7 @@ public class Main {
 
 
                     User user = new User(loginReg, passwordReg);
-                    userFacade.registerUser(user);
+                    System.out.println(userFacade.registerUser(user));
 
                     break;
                 case 0:
@@ -195,15 +199,31 @@ public class Main {
                                 product = createOtherProduct();
                                 break;
                         }
-                        productFacade.createProduct(product);
-
+                        System.out.println(productFacade.createProduct(product));
+                        break;
                     case 2:
                         System.out.println("Podaj nazwę produktu do usunięcia");
-                        productFacade.removeProduct(scanner.next());
-
+                        System.out.println(productFacade.removeProduct(scanner.next()));
+                        break;
                     case 3:
-                        productFacade.getAllProducts();
+                        List<Product> allProducts = productFacade.getAllProducts();
 
+                        for (Product loop : allProducts){
+
+                            showProduct(loop);
+
+                            if (loop instanceof Boots) {
+                                System.out.println( "\t" + "Size: " + ((Boots) loop).getSize() + "\t" + "Skin type " + ((Boots) loop).getSkinType());
+
+                            }
+                            if (loop instanceof Cloth) {
+                                System.out.println( "\t" + "Size: " + ((Cloth) loop).getSize() + "\t" + "Material " + ((Cloth) loop).getMaterial());
+
+                            }
+
+                        }
+
+                        break;
                     case 0:
                         loggedOn = false;
                         break;

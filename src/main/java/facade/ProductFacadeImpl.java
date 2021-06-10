@@ -63,10 +63,12 @@ public class ProductFacadeImpl implements ProductFacade {
     @Override
     public List<Product> getAllProducts() {
         try {
+            System.out.println("List of available products:");
             return productService.getAllProducts();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("No products were found");
          return Collections.emptyList();
     }
 }

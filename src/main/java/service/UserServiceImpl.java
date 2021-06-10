@@ -17,13 +17,13 @@ public class UserServiceImpl implements UserService {
     private UserValidator userValidator = UserValidator.getInstance();
 
     //Singleton
-    private static UserServiceImpl userServiceInstance = null;
+    private static UserServiceImpl instanceUserService = null;
 
     public static UserServiceImpl getInstance() {
-        if (userServiceInstance == null) {
-            userServiceInstance = new UserServiceImpl();
+        if (instanceUserService == null) {
+            instanceUserService = new UserServiceImpl();
         }
-        return userServiceInstance;
+        return instanceUserService;
     }
 
     private UserServiceImpl() {
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
     public boolean addUser(User user) throws UserShortLengthPasswordException, UserShortLengthLoginException, UserLoginAlreadyExistException {
 
             if (isLoginExist(user.getUserLogin())) {
-                throw new UserLoginAlreadyExistException();
+                throw new UserLoginAlreadyExistException("User already exists");
         }
 
             if (userValidator.isValidate(user)) {
@@ -91,12 +91,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeUserById(Long userId) throws IOException {
+    public void removeUserById(Long userId) {
         userDao.removeUserById(userId);
     }
 
     private boolean isLoginExist(String login) {
-        User user = userServiceInstance.getUserByLogin(login);
+        User user = instanceUserService.getUserByLogin(login);
 
 
             return (user != null);

@@ -28,7 +28,7 @@ public class UserRegisterLoginImpl implements UserRegisterLoginFacade {
     public String registerUser(User user) {
         try {
             userService.addUser(user);
-            return "Register successfully";
+            return "Registered successfully";
         } catch (UserShortLengthPasswordException e) {
             e.printStackTrace();
             return e.getMessage();

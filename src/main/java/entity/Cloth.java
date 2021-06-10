@@ -20,11 +20,11 @@ public class Cloth extends Product {
         this.material = material;
     }
 
-    String getSize () {
+    public String getSize () {
         return this.size;
     }
 
-    Material getMaterial () {
+    public Material getMaterial () {
         return this.material;
     }
 

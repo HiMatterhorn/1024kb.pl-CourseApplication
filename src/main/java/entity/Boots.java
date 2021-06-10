@@ -21,11 +21,11 @@ public class Boots extends Product {
         this.skinType = isNaturalSkin;
     }
 
-    int getSize () {
+    public int getSize () {
         return this.size;
     }
 
-    SkinType getSkinType () {
+    public SkinType getSkinType () {
         return skinType;
     }
 

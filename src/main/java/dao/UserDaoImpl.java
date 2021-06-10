@@ -4,6 +4,7 @@ import api.UserDao;
 import entity.User;
 
 import java.sql.*;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,12 +42,12 @@ public class UserDaoImpl implements UserDao {
         PreparedStatement statement = null;
 
         try {
-            String query = "insert into " + tableName + "(ID = ?, user = ?, login = ?);";
+            String query = "insert into " + tableName + " (login, password) values (?, ?)";
             statement = connection.prepareStatement(query);
 
-            statement.setLong(1, user.getUserId());
-            statement.setString(2, user.getUserLogin());
-            statement.setString(3, user.getUserPassword());
+ //           statement.setLong(1, user.getUserId());
+            statement.setString(1, user.getUserLogin());
+            statement.setString(2, user.getUserPassword());
 
             statement.execute();
             statement.close();
@@ -97,8 +98,9 @@ public class UserDaoImpl implements UserDao {
         Statement statement = null;
 
         try {
+            statement = connection.createStatement();
             String query = "select * from " + tableName + ";";
-            ResultSet resultSet = connection.createStatement().executeQuery(query);
+            ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
                 Long ID = resultSet.getLong("ID");
@@ -113,6 +115,9 @@ public class UserDaoImpl implements UserDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if (users.isEmpty()){
+            return Collections.emptyList();}
 
         return users;
     }
